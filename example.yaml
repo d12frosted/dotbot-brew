@@ -4,3 +4,5 @@
     - emacs --with-cocoa --with-gnutls --with-librsvg --with-imagemagick --HEAD --use-git-head
 
 - brew: [gnupg, gnupg2]
+
+- cask: [colorpicker, vlc]

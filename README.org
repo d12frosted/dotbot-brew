@@ -1,28 +1,28 @@
 * Dotbot =brew= plugin
 
-Plugin for [[https://github.com/anishathalye/dotbot][dotbot]] that adds =brew= directive. It allows installation of packages
-using =brew= on OS X. In case =brew= is not installed, it will be automatically
-loaded and configured. The plugin itself is pretty silly as it doesn't handle
-updates and fails on unsupported operating systems.
+Plugin for [[https://github.com/anishathalye/dotbot][dotbot]] that adds =brew= and =cask= directives. It allows installation of
+packages using =brew= and =brew cask= on OS X. In case =brew= is not installed, it
+will be automatically loaded and configured. The plugin itself is pretty silly
+as it doesn't handle updates and fails on unsupported operating systems.
 
 ** Installation
 
 Just add it as submodule of your dotfiles repository.
 
 #+BEGIN_SRC shell
-git submodule add https://github.com/d12frosted/dotbot-brew
+git submodule add https://github.com/d12frosted/dotbot-brew.git
 #+END_SRC
 
 Modify your =install= script, so it automatically enables =brew= plugin.
 
 #+BEGIN_SRC shell
-"${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASEDIR}" -p dotbot-brew/brew.py -c "${CONFIG}" "${@}"
+"${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASEDIR}" --plugin-dir dotbot-brew -c "${CONFIG}" "${@}"
 #+END_SRC
 
 ** Usage
 
 In your =install.conf.yaml= use =brew= directive to list all packages to be
-installed using =brew=. For example:
+installed using =brew=. The same works with =cask.= For example:
 
 #+BEGIN_SRC yaml
 - brew:
@@ -31,4 +31,6 @@ installed using =brew=. For example:
     - emacs --with-cocoa --with-gnutls --with-librsvg --with-imagemagick --HEAD --use-git-head
 
 - brew: [gnupg, gnupg2]
+
+- cask: [colorpicker, vlc]
 #+END_SRC

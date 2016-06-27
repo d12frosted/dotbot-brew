@@ -1,14 +1,15 @@
 import os, subprocess, dotbot
+from brew import Brew
 
-class Brew(dotbot.Plugin):
-    _directive = "brew"
+class Cask(dotbot.Plugin):
+    _directive = "cask"
 
     def can_handle(self, directive):
         return directive == self._directive
 
     def handle(self, directive, data):
         if directive != self._directive:
-            raise ValueError('Brew cannot handle directive %s' %
+            raise ValueError('Cask cannot handle directive %s' %
                 directive)
         return self._process_commands(data)
 
@@ -19,7 +20,7 @@ class Brew(dotbot.Plugin):
         with open(os.devnull, 'w') as devnull:
             for item in data:
                 stdin = stdout = stderr = devnull
-                cmd = "brew install %s" % item
+                cmd = "brew cask install %s" % item
                 self._log.info("Installing %s" % item)
                 ret = subprocess.call(cmd, shell=True, stdin=stdin, stdout=stdout,
                     stderr=stderr, cwd=self._context.base_directory())
@@ -34,10 +35,8 @@ class Brew(dotbot.Plugin):
 
     @staticmethod
     def bootstrap(self):
-        cmd = """hash brew || {
-          ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-          brew update
-        }"""
+        Brew.bootstrap(self)
+        cmd = "brew tap caskroom/cask"
         with open(os.devnull, 'w') as devnull:
             stdin = stdout = stderr = devnull
             subprocess.call(cmd, shell=True, stdin=stdin, stdout=stdout, stderr=stderr)
