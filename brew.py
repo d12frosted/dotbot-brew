@@ -31,11 +31,14 @@ class Brew(dotbot.Plugin):
             stdin = stdout = stderr = devnull
             for package in packages_list:
                 log.info("Installing %s" % package)
-                cmd = "%s %s" % (install_cmd, package)
-                result = subprocess.call(cmd, shell=True, stdin=stdin, stdout=stdout, stderr=stderr, cwd=cwd)
-                if result != 0:
-                    log.warning('Failed to install [%s]' % package)
-                    return False
+                cmd = "brew --cellar %s" % package
+                isInstalled = subprocess.call(cmd, shell=True, stdin=stdin, stdout=stdout, stderr=stderr, cwd=cwd)
+                if isInstalled != 0:
+                    cmd = "%s %s" % (install_cmd, package)
+                    result = subprocess.call(cmd, shell=True, stdin=stdin, stdout=stdout, stderr=stderr, cwd=cwd)
+                    if result != 0:
+                        log.warning('Failed to install [%s]' % package)
+                        return False
             return True
 
     def _bootstrap(self, cmd):
