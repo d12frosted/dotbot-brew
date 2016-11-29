@@ -1,4 +1,4 @@
-import os, subprocess, dotbot
+import os, platform, subprocess, dotbot
 
 class Brew(dotbot.Plugin):
     _brewDirective = "brew"
@@ -68,10 +68,16 @@ class Brew(dotbot.Plugin):
                             cwd=self._context.base_directory())
 
     def _bootstrap_brew(self):
-        cmd = """hash brew || {
-          ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-          brew update
-        }"""
+        if platform.system() == 'Linux':
+            cmd = """hash brew || {
+              ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)"
+              brew update
+            }"""
+        else:
+            cmd = """hash brew || {
+              ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+              brew update
+            }"""
         self._bootstrap(cmd)
 
     def _bootstrap_cask(self):
