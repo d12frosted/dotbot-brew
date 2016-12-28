@@ -50,7 +50,10 @@ class Brew(dotbot.Plugin):
         with open(os.devnull, 'w') as devnull:
             stdin = stdout = stderr = devnull
             for package in packages_list:
-                cmd = "brew --cellar %s" % package
+                if install_cmd == 'brew install':
+                    cmd = "brew ls --versions %s" % package
+                else:
+                    cmd = "brew cask ls --versions %s" % package
                 isInstalled = subprocess.call(cmd, shell=True, stdin=stdin, stdout=stdout, stderr=stderr, cwd=cwd)
                 if isInstalled != 0:
                     log.info("Installing %s" % package)
