@@ -22,9 +22,13 @@ Modify your =install= script, so it automatically enables =brew= plugin.
 ** Usage
 
 In your =install.conf.yaml= use =brew= directive to list all packages to be
-installed using =brew=. The same works with =cask.= For example:
+installed using =brew=. The same works with =cask= and =brewfile=. For example:
 
 #+BEGIN_SRC yaml
+- brewfile:
+    - Brewfile
+    - brew/Brewfile
+
 - tap:
     - caskroom/fonts
 
