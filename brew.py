@@ -78,7 +78,7 @@ class Brew(dotbot.Plugin):
                 result = subprocess.call(cmd, shell=True, cwd=cwd)
 
                 if result != 0:
-                    log.warning('Failed to install file [%s]' % tap)
+                    log.warning('Failed to install file [%s]' % f)
                     return False
             return True
 
