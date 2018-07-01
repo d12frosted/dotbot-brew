@@ -93,10 +93,8 @@ class Brew(dotbot.Plugin):
         if platform.system() == 'Linux':
             link = "https://raw.githubusercontent.com/Linuxbrew/install/master/install"
 
-        cmd = """hash brew || {{
-              ruby -e "$(curl -fsSL {0})"
-              brew update
-            }}""".format(link)
+        cmd = """hash brew || ruby -e "$(curl -fsSL {0})";
+              brew update""".format(link)
         self._bootstrap(cmd)
 
     def _bootstrap_cask(self):
