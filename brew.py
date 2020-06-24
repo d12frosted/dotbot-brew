@@ -89,11 +89,8 @@ class Brew(dotbot.Plugin):
                             cwd=self._context.base_directory())
 
     def _bootstrap_brew(self):
-        link = "https://raw.githubusercontent.com/Homebrew/install/master/install"
-        if platform.system() == 'Linux':
-            link = "https://raw.githubusercontent.com/Linuxbrew/install/master/install"
-
-        cmd = """hash brew || ruby -e "$(curl -fsSL {0})";
+        link = "https://raw.githubusercontent.com/Homebrew/install/master/install.sh"
+        cmd = """hash brew || /bin/bash -c "$(curl -fsSL {0})";
               brew update""".format(link)
         self._bootstrap(cmd)
 
