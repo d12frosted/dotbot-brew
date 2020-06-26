@@ -1,0 +1,21 @@
+name: macOS
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Install some package
+      run: ./test emacs
+
+    - name: Test installed package
+      run: brew test emacs

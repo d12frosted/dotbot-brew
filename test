@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+packages="$1"
+dotfiles=$(mktemp -d)
+
+cd "$dotfiles" && {
+  git init
+  git submodule add https://github.com/anishathalye/dotbot
+  git submodule add https://github.com/d12frosted/dotbot-brew.git
+
+  git config -f .gitmodules submodule.dotbot.ignore dirty
+
+  # copy install script
+  cp dotbot/tools/git-submodule/install .
+
+  # patch installation to support dotbot-brew
+  sed -i -e "s/-c/--plugin-dir dotbot-brew -c/g" "install"
+
+  echo "- brew: [$packages]" > install.conf.yaml
+
+  ./install
+}
