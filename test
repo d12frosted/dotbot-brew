@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-packages="$1"
+package="$1"
+cask="$2"
 dotfiles=$(mktemp -d)
 
 cd "$dotfiles" && {
@@ -16,7 +17,9 @@ cd "$dotfiles" && {
   # patch installation to support dotbot-brew
   sed -i -e "s/-c/--plugin-dir dotbot-brew -c/g" "install"
 
-  echo "- brew: [$packages]" > install.conf.yaml
+  echo -n > install.conf.yaml
+  echo "- brew: [$package]" >> install.conf.yaml
+  echo "- cask: [$cask]" >> install.conf.yaml
 
   ./install
 }
