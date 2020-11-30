@@ -21,6 +21,7 @@ class Brew(dotbot.Plugin):
             return self._process_data("brew cask install", data)
         if directive == self._brewFileDirective:
             self._bootstrap_brew()
+            self._bootstrap_cask()
             return self._install_bundle(data)
         raise ValueError('Brew cannot handle directive %s' % directive)
 
