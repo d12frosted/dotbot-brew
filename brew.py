@@ -75,7 +75,7 @@ class Brew(dotbot.Plugin):
             stdin = stdout = stderr = devnull
             for f in brew_files:
                 log.info("Installing from file %s" % f)
-                cmd = "brew bundle --file=%s" % f            
+                cmd = "brew bundle --verbose --file=%s" % f            
                 result = subprocess.call(cmd, shell=True, cwd=cwd)
 
                 if result != 0:
