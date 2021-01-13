@@ -3,7 +3,7 @@ name: macOS
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
 
 jobs:
@@ -18,3 +18,5 @@ jobs:
 
       - name: Test installed package
         run: brew test emacs
+      
+        

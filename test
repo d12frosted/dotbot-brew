@@ -17,9 +17,13 @@ cd "$dotfiles" && {
   # patch installation to support dotbot-brew
   sed -i -e "s/-c/--plugin-dir dotbot-brew -c/g" "install"
 
+  echo -n > Brewfile
+  echo "brew vim" >> Brewfile
+
   echo -n > install.conf.yaml
   echo "- brew: [$package]" >> install.conf.yaml
   echo "- cask: [$cask]" >> install.conf.yaml
+  echo "- brewfile: ['Brewfile']"
 
   ./install
 }
