@@ -107,7 +107,6 @@ class Brew(dotbot.Plugin):
         if defaults.get(self._autoBootstrapOption, True) == True:
             self._bootstrap_brew()
             self._bootstrap_cask()
-        stdin = stdout = stderr = devnull
         for f in brew_files:
             log.info("Installing from file %s" % f)
             cmd = "brew bundle --verbose --file=%s" % f
