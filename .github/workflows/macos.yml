@@ -17,13 +17,13 @@ jobs:
         run: ./test
 
       - name: Test installed brew
-        run: brew test ack
+        run: brew ls ack
 
       - name: Test installed cask
-        run: brew test gpg-suite
+        run: brew ls --cask gpg-suite
 
       - name: Test cask installed through Brewfile
-        run: brew test firefox
+        run: brew ls --cask firefox
 
       - name: Test brew installed through Brewfile
-        run: brew test jq
+        run: brew ls jq
