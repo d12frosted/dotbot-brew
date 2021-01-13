@@ -2,6 +2,9 @@
 
 package="$1"
 cask="$2"
+brewBrewfile="$3"
+tapBrewfile="$4"
+caskBrewfile="$5"
 dotfiles=$(mktemp -d)
 
 cd "$dotfiles" && {
@@ -18,12 +21,15 @@ cd "$dotfiles" && {
   sed -i -e "s/-c/--plugin-dir dotbot-brew -c/g" "install"
 
   echo -n > Brewfile
-  echo "brew vim" >> Brewfile
+  echo 'tap "$tapBrewfile"' >> Brewfile
+  echo 'cask "$caskBrewfile"' >> Brewfile
+  echo 'brew "$brewBrewfile"' >> Brewfile
 
   echo -n > install.conf.yaml
+  echo "- installBrew: [brew, cask]" >> install.conf.yaml
   echo "- brew: [$package]" >> install.conf.yaml
   echo "- cask: [$cask]" >> install.conf.yaml
-  echo "- brewfile: ['Brewfile']"
+  echo "- brewfile: [Brewfile]" >> install.conf.yaml
 
-  ./install
+  ./install --verbose
 }

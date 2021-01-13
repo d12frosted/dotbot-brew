@@ -13,10 +13,17 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Install some package
-        run: ./test emacs vlc
+      - name: Install some packages
+        run: ./test emacs discord vi homebrew/cask-fonts font-meslo-lg-nerd-font
 
-      - name: Test installed package
+      - name: Test installed brew
         run: brew test emacs
-      
-        
+
+      - name: Test installed cask
+        run: brew test discord
+
+      - name: Test cask installed through Brewfile
+        run: brew test font-meslo-lg-nerd-font
+
+      - name: Test brew installed through Brewfile
+        run: brew test vim
