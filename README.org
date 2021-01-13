@@ -41,3 +41,39 @@ installed using =brew=. The same works with =cask= and =brewfile=. For example:
 
 - cask: [colorpicker, vlc]
 #+END_SRC
+
+If you plan on having multiple instances of the directives in this package, you should consider
+using defaults to disable auto_bootstrap (installation of brew and cask on every command), and 
+installing first with the installBrew: directive
+
+#+BEGIN_SRC yaml
+- defaults:
+    - brewfile:
+        - auto_bootstrap: false
+    - brew:
+        - auto_bootstrap: false
+    - cask:
+        - auto_bootstrap: false
+
+- installBrew:
+    - brew
+    - cask
+
+- brewfile:
+    - Brewfile
+    - brew/Brewfile
+
+- tap:
+    - caskroom/fonts
+
+- brew:
+    - git
+    - git-lfs
+    - emacs --with-cocoa --with-gnutls --with-librsvg --with-imagemagick --HEAD --use-git-head
+
+- brew: [gnupg, gnupg2]
+
+- cask: [colorpicker, vlc]
+#+END_SRC
+
+Defaults also can control stdin, stdout and stderr (disabling with false, enabling with true)
