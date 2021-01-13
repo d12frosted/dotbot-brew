@@ -1,11 +1,38 @@
-- tap:
-  - caskroom/fonts
+- defaults:
+  brew: 
+    auto_bootstrap: false
+    stdin: true
+    stderr: true
+    stdout: true
+
+  cask: 
+    auto_bootstrap: false
+    stdin: true
+    stderr: true
+    stdout: true
+
+  brewfile: 
+    auto_bootstrap: false
+    stdin: true
+    stderr: true
+    stdout: true
+
+- installBrew:
+    - brew
+    - cask
+
+- brewfile: 
+  - Brewfile-example
 
 - brew:
-    - git
-    - git-lfs
-    - emacs --with-cocoa --with-gnutls --with-librsvg --with-imagemagick --HEAD --use-git-head
+  - git
+  - bash
 
-- brew: [gnupg, gnupg2]
+- tap:
+    - homebrew/cask-fonts
 
-- cask: [colorpicker, vlc]
+- brew: [ack, ag]
+
+- cask:
+  - gpg-suite
+  - vlc

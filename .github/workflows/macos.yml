@@ -11,19 +11,19 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
       - name: Install some packages
-        run: ./test emacs discord vi homebrew/cask-fonts font-meslo-lg-nerd-font
+        run: ./test
 
       - name: Test installed brew
-        run: brew test emacs
+        run: brew test ack
 
       - name: Test installed cask
-        run: brew test discord
+        run: brew test gpg-suite
 
       - name: Test cask installed through Brewfile
-        run: brew test font-meslo-lg-nerd-font
+        run: brew test firefox
 
       - name: Test brew installed through Brewfile
-        run: brew test vim
+        run: brew test jq
