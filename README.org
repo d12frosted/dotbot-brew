@@ -1,4 +1,7 @@
 * Dotbot =brew= plugin
+:PROPERTIES:
+:ID:                     52d1c964-770e-4844-8ab4-2f7f395d97c7
+:END:
 
 Plugin for [[https://github.com/anishathalye/dotbot][dotbot]] that adds =brew= and =cask= directives. It allows installation of
 packages using =brew= and =brew cask= on OS X. In case =brew= is not installed, it
@@ -6,6 +9,9 @@ will be automatically loaded and configured. The plugin itself is pretty silly
 as it doesn't handle updates and fails on unsupported operating systems.
 
 ** Installation
+:PROPERTIES:
+:ID:                     597691cd-5651-400f-ada0-a68454d7825a
+:END:
 
 Just add it as submodule of your dotfiles repository.
 
@@ -20,6 +26,9 @@ Modify your =install= script, so it automatically enables =brew= plugin.
 #+END_SRC
 
 ** Usage
+:PROPERTIES:
+:ID:                     2e816835-29cf-4747-8d19-9db69717f515
+:END:
 
 In your =install.conf.yaml= use =brew= directive to list all packages to be
 installed using =brew=. The same works with =cask= and =brewfile=. For example:

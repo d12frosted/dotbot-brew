@@ -1,25 +1,36 @@
 #!/usr/bin/env bash
 
-package="$1"
-cask="$2"
+set -e
+
+echo "create a temporary dotfiles directory at $dotfiles"
 dotfiles=$(mktemp -d)
 
+echo "copy install configurations"
+cp "example.yaml" "$dotfiles/install.conf.yaml"
+cp "Brewfile-example" "$dotfiles/Brewfile-example"
+
+echo "copy dotbot-brew"
+cp -r "." "$dotfiles/dotbot-brew"
+
 cd "$dotfiles" && {
+  echo "initialize repository"
   git init
   git submodule add https://github.com/anishathalye/dotbot
-  git submodule add https://github.com/d12frosted/dotbot-brew.git
 
   git config -f .gitmodules submodule.dotbot.ignore dirty
 
-  # copy install script
+  echo "copy install script"
   cp dotbot/tools/git-submodule/install .
 
-  # patch installation to support dotbot-brew
+  echo "patch installation to support dotbot-brew"
   sed -i -e "s/-c/--plugin-dir dotbot-brew -c/g" "install"
 
-  echo -n > install.conf.yaml
-  echo "- brew: [$package]" >> install.conf.yaml
-  echo "- cask: [$cask]" >> install.conf.yaml
+  echo "content of install.conf.yaml"
+  cat install.conf.yaml
 
+  echo "install all packages"
   ./install
+
+  echo "make sure that one of the packages was properly installed"
+  brew test ag
 }

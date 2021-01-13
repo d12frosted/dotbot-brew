@@ -11,10 +11,6 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - uses: actions/checkout@v1
-
-      - name: Install some package
-        run: ./test emacs vlc
-
-      - name: Test installed package
-        run: brew test emacs
+      - uses: actions/checkout@v2
+      - name: Install some packages
+        run: ./test

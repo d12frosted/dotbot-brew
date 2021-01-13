@@ -1,11 +1,13 @@
+- brewfile:
+    - Brewfile-example
+
 - tap:
-  - caskroom/fonts
+    - homebrew/cask-fonts
 
 - brew:
     - git
-    - git-lfs
-    - emacs --with-cocoa --with-gnutls --with-librsvg --with-imagemagick --HEAD --use-git-head
+    - bash
 
-- brew: [gnupg, gnupg2]
+- brew: [ack, ag]
 
-- cask: [colorpicker, vlc]
+- cask: [gpg-suite, vlc]

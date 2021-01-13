@@ -18,7 +18,7 @@ class Brew(dotbot.Plugin):
             return self._process_data("brew install", data)
         if directive == self._caskDirective:
             self._bootstrap_cask()
-            return self._process_data("brew cask install", data)
+            return self._process_data("brew install --cask", data)
         if directive == self._brewFileDirective:
             self._bootstrap_brew()
             self._bootstrap_cask()
@@ -33,7 +33,7 @@ class Brew(dotbot.Plugin):
             for tap in tap_list:
                 log.info("Tapping %s" % tap)
                 cmd = "brew tap %s" % (tap)
-                result = subprocess.call(cmd, shell=True, stdin=stdin, stdout=stdout, stderr=stderr, cwd=cwd)
+                result = subprocess.call(cmd, shell=True, cwd=cwd)
 
                 if result != 0:
                     log.warning('Failed to tap [%s]' % tap)
@@ -62,7 +62,7 @@ class Brew(dotbot.Plugin):
                 if isInstalled != 0:
                     log.info("Installing %s" % package)
                     cmd = "%s %s" % (install_cmd, package)
-                    result = subprocess.call(cmd, shell=True, stdin=stdin, stdout=stdout, stderr=stderr, cwd=cwd)
+                    result = subprocess.call(cmd, shell=True, cwd=cwd)
                     if result != 0:
                         log.warning('Failed to install [%s]' % package)
                         return False
