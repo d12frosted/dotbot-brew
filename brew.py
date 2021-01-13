@@ -107,17 +107,15 @@ class Brew(dotbot.Plugin):
         if defaults.get(self._autoBootstrapOption, True) == True:
             self._bootstrap_brew()
             self._bootstrap_cask()
-        with open(os.devnull, 'w') as devnull:
-            stdin = stdout = stderr = devnull
-            for f in brew_files:
-                log.info("Installing from file %s" % f)
-                cmd = "brew bundle --verbose --file=%s" % f
-                result = self._invokeShellCommand(cmd, defaults)
+        stdin = stdout = stderr = devnull
+        for f in brew_files:
+            log.info("Installing from file %s" % f)
+            cmd = "brew bundle --verbose --file=%s" % f
+            result = self._invokeShellCommand(cmd, defaults)
 
-                if result != 0:
-                    log.warning('Failed to install file [%s]' % f)
-                    return False
-            return True
+            if result != 0:
+                log.warning('Failed to install file [%s]' % f)
+                return False
 
     def _installBrew(self, components):
         log = self._log
