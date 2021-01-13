@@ -134,7 +134,7 @@ class Brew(dotbot.Plugin):
     def _bootstrap_brew(self):
         self._log.info("Installing brew")
         link = "https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
-        cmd = """/bin/bash -c "$(curl -fsSL {0})" """.format(link)
+        cmd = """[[ $(command -v brew) != "" ]] || /bin/bash -c "$(curl -fsSL {0})" """.format(link)
         return subprocess.call(cmd, shell=True, cwd=self._context.base_directory()) == 0
 
     def _bootstrap_cask(self):
