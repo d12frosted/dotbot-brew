@@ -29,7 +29,7 @@ cd "$dotfiles" && {
   cat install.conf.yaml
 
   echo "install all packages"
-  ./install
+  ./install --verbose
 
   echo "make sure that one of the packages was properly installed"
   brew test ag
