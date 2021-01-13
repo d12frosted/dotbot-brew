@@ -25,11 +25,35 @@ cd "$dotfiles" && {
   echo 'cask "$caskBrewfile"' >> Brewfile
   echo 'brew "$brewBrewfile"' >> Brewfile
 
-  echo -n > install.conf.yaml
-  echo "- installBrew: [brew, cask]" >> install.conf.yaml
-  echo "- brew: [$package]" >> install.conf.yaml
-  echo "- cask: [$cask]" >> install.conf.yaml
-  echo "- brewfile: [Brewfile]" >> install.conf.yaml
+  echo "
+- defaults:
+  brew: 
+    auto_bootstrap: false
+    stdin: true
+    stderr: true
+    stdout: true
+
+  cask: 
+    auto_bootstrap: false
+    stdin: true
+    stderr: true
+    stdout: true
+
+  brewfile: 
+    auto_bootstrap: false
+    stdin: true
+    stderr: true
+    stdout: true
+
+- brewfile: 
+  - Brewfile
+
+- brew:
+  - $package
+
+- cask:
+  - $cask
+" > install.conf.yaml
 
   ./install --verbose
 }
