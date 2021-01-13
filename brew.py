@@ -50,7 +50,7 @@ class Brew(dotbot.Plugin):
         for tap in tap_list:
             log.info("Tapping %s" % tap)
             cmd = "brew tap %s" % (tap)
-            result = self._invoke(cmd, defaults)
+            result = self._invokeShellCommand(cmd, defaults)
             if result != 0:
                 log.warning('Failed to tap [%s]' % tap)
                 return False
