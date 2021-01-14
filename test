@@ -30,7 +30,4 @@ cd "$dotfiles" && {
 
   echo "install all packages"
   ./install --verbose
-
-  echo "make sure that one of the packages was properly installed"
-  brew test ag
 }
