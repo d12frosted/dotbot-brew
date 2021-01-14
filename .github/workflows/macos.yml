@@ -5,6 +5,8 @@ on:
     branches:
       - master
   pull_request:
+  schedule:
+    - cron: "0 6 * * *"
 
 jobs:
   build:
@@ -16,14 +18,14 @@ jobs:
       - name: Install some packages
         run: ./test
 
-      - name: Test installed brew
+      - name: Test package installed via brew directive
         run: brew ls ack
 
-      - name: Test installed cask
+      - name: Test package installed via cask directive
         run: brew ls --cask gpg-suite
 
-      - name: Test cask installed through Brewfile
+      - name: Test brew package installed via brewfile directive
         run: brew ls --cask firefox
 
-      - name: Test brew installed through Brewfile
+      - name: Test cask package installed via brewfile directive
         run: brew ls jq
