@@ -12,6 +12,7 @@ class Brew(dotbot.Plugin):
     _brewFileDirective = "brewfile"
 
     _autoBootstrapOption = "auto_bootstrap"
+    _forceIntelOption = "force_intel"
 
     def can_handle(self, directive):
         return directive in (self._installBrewDirective, self._tapDirective, self._brewDirective, self._caskDirective, self._brewFileDirective)
@@ -40,6 +41,8 @@ class Brew(dotbot.Plugin):
                 stdout = None
             if defaults.get('stderr', False) == True:
                 stderr = None
+            if defaults.get(self._forceIntelOption, False) == True:
+                cmd = "arch --x86_64 " + cmd
             return subprocess.call(cmd, shell=True, stdin=stdin, stdout=stdout, stderr=stderr,
                                    cwd=self._context.base_directory())
 
