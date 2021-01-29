@@ -14,7 +14,7 @@ operating systems.
 
 If you're on an ARM mac, you probably want to force to run the Intel version of Homebrew
 since the ARM version is still not fully functional and buggy, so you can add the
-`- force_intel: true` option to defaults.
+=- force_intel: true= option to defaults.
 
 ** Installation
 :PROPERTIES:
