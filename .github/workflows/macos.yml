@@ -5,8 +5,6 @@ on:
     branches:
       - master
   pull_request:
-  schedule:
-    - cron: "0 6 * * *"
 
 jobs:
   build:
@@ -14,5 +12,18 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
       - name: Install some packages
         run: ./test
+
+      - name: Test installed brew
+        run: brew test ack
+
+      - name: Test installed cask
+        run: brew test gpg-suite
+
+      - name: Test cask installed via Brewfile
+        run: brew test firefox
+
+      - name: Test brew installed via Brewfile
+        run: brew test jq
