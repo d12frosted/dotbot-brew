@@ -76,6 +76,8 @@ class Brew(dotbot.Plugin):
     def _install(self, install_format, check_installed_format, pkg):
         cwd = self._context.base_directory()
         with open(os.devnull, 'w') as devnull:
+            if self._defaults.get(self._forceIntelOption, False) == True:
+                check_installed_format = "arch --x86_64 " + check_installed_format
             isInstalled = subprocess.call(
                 check_installed_format % (pkg),
                 shell=True, stdin=devnull, stdout=devnull, stderr=devnull, cwd=cwd)
@@ -112,9 +114,13 @@ class Brew(dotbot.Plugin):
         link = "https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
         cmd = """[[ $(command -v brew) != "" ]] || /bin/bash -c "$(curl -fsSL {0})" """.format(
             link)
+        if self._defaults.get(self._forceIntelOption, False) == True:
+            cmd = "arch --x86_64 " + cmd
         return subprocess.call(cmd, shell=True, cwd=self._context.base_directory()) == 0
 
     def _bootstrap_cask(self):
         self._log.info("Installing cask")
         cmd = "brew tap homebrew/cask"
+        if self._defaults.get(self._forceIntelOption, False) == True:
+            cmd = "arch --x86_64 " + cmd
         return subprocess.call(cmd, shell=True, cwd=self._context.base_directory()) == 0
