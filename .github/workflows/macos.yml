@@ -14,5 +14,25 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
       - name: Install some packages
         run: ./test
+
+      - name: Test installed brew `ack`
+        run: brew ls ack
+      - name: Test installed brew `ag`
+        run: brew ls ag
+      - name: Test installed brew `bash`
+        run: brew ls bash
+      - name: Test installed brew `git`
+        run: brew ls git
+
+      - name: Test installed cask `gpg-suite`
+        run: brew ls --cask gpg-suite
+      - name: Test installed cask `firefox`
+        run: brew ls --cask vlc
+
+      - name: Test brew installed via Brewfile `jq`
+        run: brew ls jq
+      - name: Test cask installed via Brewfile `firefox`
+        run: brew ls --cask firefox
