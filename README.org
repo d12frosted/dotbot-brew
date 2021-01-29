@@ -7,10 +7,12 @@
 #+NAME:   fig:INT-TESTS
 [[https://github.com/d12frosted/dotbot-brew/workflows/macOS/badge.svg]]
 
-Plugin for [[https://github.com/anishathalye/dotbot][dotbot]] that adds =brew= and =cask= directives. It allows installation of
-packages using =brew= and =brew cask= on OS X. In case =brew= is not installed, it
-will be automatically loaded and configured. The plugin itself is pretty silly
-as it doesn't handle updates and fails on unsupported operating systems.
+Plugin for [[https://github.com/anishathalye/dotbot][dotbot]] that adds =brew=, =brewfile=,
+and =cask= directives. It allows installation of packages using =brew= and =brew cask= on macOS.
+
+In case =brew= is not installed, it will be automatically loaded and configured.
+The plugin itself is pretty silly as it doesn't handle updates and fails on unsupported
+operating systems.
 
 ** Installation
 :PROPERTIES:
@@ -38,6 +40,33 @@ In your =install.conf.yaml= use =brew= directive to list all packages to be
 installed using =brew=. The same works with =cask= and =brewfile=. For example:
 
 #+BEGIN_SRC yaml
+- brewfile:
+    - Brewfile
+    - brew/Brewfile
+
+- tap:
+    - caskroom/fonts
+
+- brew:
+    - git
+    - git-lfs
+    - emacs --with-cocoa --with-gnutls --with-librsvg --with-imagemagick --HEAD --use-git-head
+
+- brew: [gnupg, gnupg2]
+
+- cask: [colorpicker, vlc]
+#+END_SRC
+
+Defaults also can control stdin, stdout and stderr (disabling with false, enabling with true),
+see below for an example
+
+#+BEGIN_SRC yaml
+- defaults:
+    - brewfile:
+        - stdin: true
+        - stdout: true
+        - stderr: true
+
 - brewfile:
     - Brewfile
     - brew/Brewfile
