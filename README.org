@@ -14,6 +14,12 @@ In case =brew= is not installed, it will be automatically loaded and configured.
 The plugin itself is pretty silly as it doesn't handle updates and fails on unsupported
 operating systems.
 
+** Note for ARM (Apple Silicon) Macs
+
+If you're on an ARM mac, you probably want to force to run the Intel version of Homebrew
+since the ARM version is still not fully functional and buggy, so you can add the
+`- force_intel: true` option to defaults.
+
 ** Installation
 :PROPERTIES:
 :ID:                     597691cd-5651-400f-ada0-a68454d7825a
