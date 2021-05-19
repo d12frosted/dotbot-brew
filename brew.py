@@ -1,4 +1,4 @@
-import os, platform, subprocess, dotbot
+import os, platform, subprocess, dotbot, sys
 
 class Brew(dotbot.Plugin):
     _brewDirective = "brew"
@@ -17,8 +17,11 @@ class Brew(dotbot.Plugin):
             self._bootstrap_brew()
             return self._process_data("brew install", data)
         if directive == self._caskDirective:
-            self._bootstrap_cask()
-            return self._process_data("brew install --cask", data)
+            if sys.platform.startswith("darwin"):
+                self._bootstrap_cask()
+                return self._process_data("brew install --cask", data)
+            else:
+                return True
         if directive == self._brewFileDirective:
             self._bootstrap_brew()
             self._bootstrap_cask()
