@@ -5,11 +5,11 @@
 
 #+CAPTION: Integration test status (macOS)
 #+NAME:   fig:INT-TESTS
-[[https://github.com/d12frosted/dotbot-brew/workflows/macOS/badge.svg]]
+[[https://github.com/d12frosted/dotbot-brew/actions/workflows/macos.yml/badge.svg]]
 
 #+CAPTION: Integration test status (Ubuntu)
 #+NAME:   fig:INT-TESTS
-[[https://github.com/d12frosted/dotbot-brew/workflows/ubuntu/badge.svg]]
+[[https://github.com/d12frosted/dotbot-brew/actions/workflows/ubuntu.yml/badge.svg]]
 
 Plugin for [[https://github.com/anishathalye/dotbot][dotbot]] that adds =brew= and =cask= directives. It allows installation of
 packages using =brew= and =brew cask= on OS X. In case =brew= is not installed, it
