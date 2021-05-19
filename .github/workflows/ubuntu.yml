@@ -1,4 +1,4 @@
-name: macOS
+name: Ubuntu
 
 on:
   push:
@@ -10,13 +10,13 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2.3.4
 
       - name: Install some packages
-        run: ./test macos
+        run: ./test linux
 
       - name: Test installed brew `ack`
         run: brew ls ack
@@ -27,12 +27,5 @@ jobs:
       - name: Test installed brew `git`
         run: brew ls git
 
-      - name: Test installed cask `gpg-suite`
-        run: brew ls --cask gpg-suite
-      - name: Test installed cask `vlc`
-        run: brew ls --cask vlc
-
       - name: Test brew installed via Brewfile `jq`
         run: brew ls jq
-      - name: Test cask installed via Brewfile `firefox`
-        run: brew ls --cask firefox

@@ -1,5 +1,5 @@
 - brewfile:
-    - Brewfile-example
+    - Brewfile
 
 - tap:
     - homebrew/cask-fonts
@@ -9,5 +9,3 @@
     - bash
 
 - brew: [ack, ag]
-
-- cask: [gpg-suite, vlc]

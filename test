@@ -2,12 +2,14 @@
 
 set -e
 
+os="$1"
+
 echo "create a temporary dotfiles directory at $dotfiles"
 dotfiles=$(mktemp -d)
 
 echo "copy install configurations"
-cp "example.yaml" "$dotfiles/install.conf.yaml"
-cp "Brewfile-example" "$dotfiles/Brewfile-example"
+cp "examples/$os/example.yaml" "$dotfiles/install.conf.yaml"
+cp "examples/$os/Brewfile" "$dotfiles/Brewfile"
 
 echo "copy dotbot-brew"
 cp -r "." "$dotfiles/dotbot-brew"
