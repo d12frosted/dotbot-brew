@@ -5,7 +5,7 @@
     - homebrew/cask-fonts
 
 - brew:
-    - git
+    - reipgrep
     - bash
 
 - brew: [ack, ag]
