@@ -25,7 +25,7 @@ jobs:
       - name: Test installed brew `bash`
         run: brew ls bash
       - name: Test installed brew `git`
-        run: brew ls git
+        run: brew ls ripgrep
 
       - name: Test installed cask `gpg-suite`
         run: brew ls --cask gpg-suite
