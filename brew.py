@@ -10,6 +10,8 @@ class Brew(dotbot.Plugin):
         return directive in (self._tapDirective, self._brewDirective, self._caskDirective, self._brewFileDirective)
 
     def handle(self, directive, data):
+        if isinstance(data, str):
+            data = [data]
         if directive == self._tapDirective:
             self._bootstrap_brew()
             return self._tap(data)
