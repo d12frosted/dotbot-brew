@@ -11,3 +11,5 @@
 - brew: [ack, ag]
 
 - cask: [gpg-suite, vlc]
+
+- shell: echo "hello single string"
