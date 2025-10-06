@@ -2,7 +2,7 @@
     - Brewfile
 
 - tap:
-    - homebrew/cask-fonts
+    - d12frosted/emacs-plus
 
 - brew:
     - git
