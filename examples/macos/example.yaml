@@ -4,7 +4,10 @@
 - brew:
     - ripgrep
     - bash
+    - dnsmasq
 
 - brew: [ack, ag]
 
 - cask: [gpg-suite, vlc]
+
+- services: [dnsmasq]
