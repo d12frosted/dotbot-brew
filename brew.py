@@ -21,6 +21,7 @@ class Brew(dotbot.Plugin):
                 self._bootstrap_cask()
                 return self._process_data("brew install --cask", data)
             else:
+                self._log.warning('Cask directive is only supported on macOS, skipping')
                 return True
         if directive == self._brewFileDirective:
             self._bootstrap_brew()
@@ -58,9 +59,9 @@ class Brew(dotbot.Plugin):
             stdin = stdout = stderr = devnull
             for package in packages_list:
                 if install_cmd == 'brew install':
-                    cmd = "brew ls --versions %s" % package
+                    cmd = "brew list --versions %s" % package
                 else:
-                    cmd = "brew cask ls --versions %s" % package
+                    cmd = "brew list --cask --versions %s" % package
                 isInstalled = subprocess.call(cmd, shell=True, stdin=stdin, stdout=stdout, stderr=stderr, cwd=cwd)
                 if isInstalled != 0:
                     log.info("Installing %s" % package)
@@ -93,12 +94,11 @@ class Brew(dotbot.Plugin):
                             cwd=self._context.base_directory())
 
     def _bootstrap_brew(self):
-        link = "https://raw.githubusercontent.com/Homebrew/install/master/install.sh"
+        link = "https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
         cmd = """hash brew || /bin/bash -c "$(curl -fsSL {0})";
               brew update""".format(link)
         self._bootstrap(cmd)
 
     def _bootstrap_cask(self):
+        # cask is now built into Homebrew, no separate tap needed
         self._bootstrap_brew()
-        cmd = "brew tap caskroom/cask"
-        self._bootstrap(cmd)
