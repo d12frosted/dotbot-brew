@@ -22,14 +22,13 @@ class Brew(dotbot.Plugin):
             return self._process_data("brew install", data)
         if directive == self._caskDirective:
             if sys.platform.startswith("darwin"):
-                self._bootstrap_cask()
+                self._bootstrap_brew()
                 return self._process_data("brew install --cask", data)
             else:
                 self._log.warning('Cask directive is only supported on macOS, skipping')
                 return True
         if directive == self._brewFileDirective:
             self._bootstrap_brew()
-            self._bootstrap_cask()
             return self._install_bundle(data)
         if directive == self._servicesDirective:
             self._bootstrap_brew()
@@ -134,7 +133,3 @@ class Brew(dotbot.Plugin):
             fi
         """.format(link)
         self._bootstrap(cmd)
-
-    def _bootstrap_cask(self):
-        # cask is now built into Homebrew, no separate tap needed
-        self._bootstrap_brew()
