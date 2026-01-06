@@ -39,18 +39,14 @@ class Brew(dotbot.Plugin):
 
     def _tap(self, tap_list):
         cwd = self._context.base_directory()
-        log = self._log
-        with open(os.devnull, 'w') as devnull:
-            stdin = stdout = stderr = devnull
-            for tap in tap_list:
-                log.info("Tapping %s" % tap)
-                cmd = "brew tap %s" % (tap)
-                result = subprocess.call(cmd, shell=True, cwd=cwd)
-
-                if result != 0:
-                    log.warning('Failed to tap [%s]' % tap)
-                    return False
-            return True
+        for tap in tap_list:
+            self._log.info("Tapping %s" % tap)
+            cmd = "brew tap %s" % tap
+            result = subprocess.call(cmd, shell=True, cwd=cwd)
+            if result != 0:
+                self._log.warning('Failed to tap [%s]' % tap)
+                return False
+        return True
 
     def _process_data(self, install_cmd, data):
         success = self._install(install_cmd, data)
