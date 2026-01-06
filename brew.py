@@ -1,4 +1,3 @@
-import os
 import subprocess
 import sys
 
@@ -58,54 +57,52 @@ class Brew(dotbot.Plugin):
 
     def _install(self, install_cmd, packages_list):
         cwd = self._context.base_directory()
-        log = self._log
-        with open(os.devnull, 'w') as devnull:
-            stdin = stdout = stderr = devnull
-            for package in packages_list:
-                if install_cmd == 'brew install':
-                    cmd = "brew list --versions %s" % package
-                else:
-                    cmd = "brew list --cask --versions %s" % package
-                isInstalled = subprocess.call(cmd, shell=True, stdin=stdin, stdout=stdout, stderr=stderr, cwd=cwd)
-                if isInstalled != 0:
-                    log.info("Installing %s" % package)
-                    cmd = "%s %s" % (install_cmd, package)
-                    result = subprocess.call(cmd, shell=True, cwd=cwd)
-                    if result != 0:
-                        log.warning('Failed to install [%s]' % package)
-                        return False
-            return True
+        for package in packages_list:
+            if install_cmd == 'brew install':
+                check_cmd = "brew list --versions %s" % package
+            else:
+                check_cmd = "brew list --cask --versions %s" % package
+            already_installed = subprocess.call(
+                check_cmd, shell=True, cwd=cwd,
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+            ) == 0
+            if not already_installed:
+                self._log.info("Installing %s" % package)
+                cmd = "%s %s" % (install_cmd, package)
+                result = subprocess.call(cmd, shell=True, cwd=cwd)
+                if result != 0:
+                    self._log.warning('Failed to install [%s]' % package)
+                    return False
+        return True
 
     def _install_bundle(self, brew_files):
         cwd = self._context.base_directory()
-        log = self._log
         for f in brew_files:
-            log.info("Installing from file %s" % f)
+            self._log.info("Installing from file %s" % f)
             cmd = "brew bundle --verbose --file=%s" % f
             result = subprocess.call(cmd, shell=True, cwd=cwd)
             if result != 0:
-                log.warning('Failed to install file [%s]' % f)
+                self._log.warning('Failed to install file [%s]' % f)
                 return False
         return True
 
     def _start_services(self, services_list):
         cwd = self._context.base_directory()
-        log = self._log
         for service in services_list:
-            log.info("Starting service %s" % service)
+            self._log.info("Starting service %s" % service)
             cmd = "brew services start %s" % service
             result = subprocess.call(cmd, shell=True, cwd=cwd)
             if result != 0:
-                log.warning('Failed to start service [%s]' % service)
+                self._log.warning('Failed to start service [%s]' % service)
                 return False
-        log.info('All services have been started')
+        self._log.info('All services have been started')
         return True
 
     def _bootstrap(self, cmd):
-        with open(os.devnull, 'w') as devnull:
-            stdin = stdout = stderr = devnull
-            subprocess.call(cmd, shell=True, stdin=stdin, stdout=stdout, stderr=stderr,
-                            cwd=self._context.base_directory())
+        subprocess.call(
+            cmd, shell=True, cwd=self._context.base_directory(),
+            stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+        )
 
     def _bootstrap_brew(self):
         link = "https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
