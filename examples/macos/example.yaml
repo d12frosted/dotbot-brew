@@ -1,9 +1,6 @@
 - brewfile:
     - Brewfile
 
-- tap:
-    - homebrew/cask-fonts
-
 - brew:
     - ripgrep
     - bash
