@@ -109,8 +109,33 @@ class Brew(dotbot.Plugin):
 
     def _bootstrap_brew(self):
         link = "https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
-        cmd = """hash brew || /bin/bash -c "$(curl -fsSL {0})";
-              brew update""".format(link)
+        # Handle brew in different locations:
+        # - /opt/homebrew/bin/brew (Apple Silicon macOS)
+        # - /usr/local/bin/brew (Intel macOS)
+        # - /home/linuxbrew/.linuxbrew/bin/brew (Linux)
+        cmd = """
+            _setup_brew_env() {{
+                if [ -x /opt/homebrew/bin/brew ]; then
+                    eval "$(/opt/homebrew/bin/brew shellenv)"
+                elif [ -x /usr/local/bin/brew ]; then
+                    eval "$(/usr/local/bin/brew shellenv)"
+                elif [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+                    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+                fi
+            }}
+            if command -v brew >/dev/null 2>&1; then
+                brew update
+            else
+                _setup_brew_env
+                if command -v brew >/dev/null 2>&1; then
+                    brew update
+                else
+                    /bin/bash -c "$(curl -fsSL {0})"
+                    _setup_brew_env
+                    brew update
+                fi
+            fi
+        """.format(link)
         self._bootstrap(cmd)
 
     def _bootstrap_cask(self):
