@@ -1,4 +1,8 @@
-import os, platform, subprocess, dotbot, sys
+import os
+import subprocess
+import sys
+
+import dotbot
 
 class Brew(dotbot.Plugin):
     _brewDirective = "brew"
