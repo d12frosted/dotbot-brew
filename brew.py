@@ -79,17 +79,14 @@ class Brew(dotbot.Plugin):
     def _install_bundle(self, brew_files):
         cwd = self._context.base_directory()
         log = self._log
-        with open(os.devnull, 'w') as devnull:
-            stdin = stdout = stderr = devnull
-            for f in brew_files:
-                log.info("Installing from file %s" % f)
-                cmd = "brew bundle --file=%s" % f
-                result = subprocess.call(cmd, shell=True, cwd=cwd)
-
-                if result != 0:
-                    log.warning('Failed to install file [%s]' % f)
-                    return False
-            return True
+        for f in brew_files:
+            log.info("Installing from file %s" % f)
+            cmd = "brew bundle --verbose --file=%s" % f
+            result = subprocess.call(cmd, shell=True, cwd=cwd)
+            if result != 0:
+                log.warning('Failed to install file [%s]' % f)
+                return False
+        return True
 
     def _start_services(self, services_list):
         cwd = self._context.base_directory()
