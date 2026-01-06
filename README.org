@@ -12,10 +12,10 @@
 </a>
 #+end_html
 
-Plugin for [[https://github.com/anishathalye/dotbot][dotbot]] that adds =brew=, =cask=, =tap=, and =brewfile= directives. It
-allows installation of packages using Homebrew on macOS and Linux. The =cask=
-directive is only supported on macOS. If =brew= is not installed, it will be
-automatically installed and configured.
+Plugin for [[https://github.com/anishathalye/dotbot][dotbot]] that adds =brew=, =cask=, =tap=, =brewfile=, and =services=
+directives. It allows installation of packages using Homebrew on macOS and
+Linux. The =cask= directive is only supported on macOS. If =brew= is not
+installed, it will be automatically installed and configured.
 
 ** Installation
 :PROPERTIES:
@@ -58,4 +58,6 @@ installed using =brew=. The same works with =cask= and =brewfile=. For example:
 - brew: [gnupg, jq]
 
 - cask: [vlc, firefox]
+
+- services: [postgresql, redis]
 #+END_SRC

@@ -5,9 +5,10 @@ class Brew(dotbot.Plugin):
     _caskDirective = "cask"
     _tapDirective = "tap"
     _brewFileDirective = "brewfile"
+    _servicesDirective = "services"
 
     def can_handle(self, directive):
-        return directive in (self._tapDirective, self._brewDirective, self._caskDirective, self._brewFileDirective)
+        return directive in (self._tapDirective, self._brewDirective, self._caskDirective, self._brewFileDirective, self._servicesDirective)
 
     def handle(self, directive, data):
         if directive == self._tapDirective:
@@ -27,6 +28,9 @@ class Brew(dotbot.Plugin):
             self._bootstrap_brew()
             self._bootstrap_cask()
             return self._install_bundle(data)
+        if directive == self._servicesDirective:
+            self._bootstrap_brew()
+            return self._start_services(data)
         raise ValueError('Brew cannot handle directive %s' % directive)
 
     def _tap(self, tap_list):
@@ -86,6 +90,19 @@ class Brew(dotbot.Plugin):
                     log.warning('Failed to install file [%s]' % f)
                     return False
             return True
+
+    def _start_services(self, services_list):
+        cwd = self._context.base_directory()
+        log = self._log
+        for service in services_list:
+            log.info("Starting service %s" % service)
+            cmd = "brew services start %s" % service
+            result = subprocess.call(cmd, shell=True, cwd=cwd)
+            if result != 0:
+                log.warning('Failed to start service [%s]' % service)
+                return False
+        log.info('All services have been started')
+        return True
 
     def _bootstrap(self, cmd):
         with open(os.devnull, 'w') as devnull:
