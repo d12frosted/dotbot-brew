@@ -4,8 +4,8 @@ set -e
 
 os="$1"
 
-echo "create a temporary dotfiles directory at $dotfiles"
 dotfiles=$(mktemp -d)
+echo "create a temporary dotfiles directory at $dotfiles"
 
 echo "copy install configurations"
 cp "examples/$os/example.yaml" "$dotfiles/install.conf.yaml"
