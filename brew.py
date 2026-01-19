@@ -1,3 +1,5 @@
+import os
+import shutil
 import subprocess
 import sys
 
@@ -10,6 +12,10 @@ class Brew(dotbot.Plugin):
     _brewFileDirective = "brewfile"
     _servicesDirective = "services"
 
+    def __init__(self, context):
+        super(Brew, self).__init__(context)
+        self._brew_path = None
+
     def can_handle(self, directive):
         return directive in (self._tapDirective, self._brewDirective, self._caskDirective, self._brewFileDirective, self._servicesDirective)
 
@@ -19,11 +25,11 @@ class Brew(dotbot.Plugin):
             return self._tap(data)
         if directive == self._brewDirective:
             self._bootstrap_brew()
-            return self._process_data("brew install", data)
+            return self._process_data(f"{self._brew_path} install", data)
         if directive == self._caskDirective:
             if sys.platform.startswith("darwin"):
                 self._bootstrap_brew()
-                return self._process_data("brew install --cask", data)
+                return self._process_data(f"{self._brew_path} install --cask", data)
             else:
                 self._log.warning('Cask directive is only supported on macOS, skipping')
                 return True
@@ -39,7 +45,7 @@ class Brew(dotbot.Plugin):
         cwd = self._context.base_directory()
         for tap in tap_list:
             self._log.info(f"Tapping {tap}")
-            cmd = f"brew tap {tap}"
+            cmd = f"{self._brew_path} tap {tap}"
             result = subprocess.call(cmd, shell=True, cwd=cwd)
             if result != 0:
                 self._log.warning(f'Failed to tap [{tap}]')
@@ -57,10 +63,10 @@ class Brew(dotbot.Plugin):
     def _install(self, install_cmd, packages_list):
         cwd = self._context.base_directory()
         for package in packages_list:
-            if install_cmd == 'brew install':
-                check_cmd = f"brew list --versions {package}"
+            if "--cask" in install_cmd:
+                check_cmd = f"{self._brew_path} list --cask --versions {package}"
             else:
-                check_cmd = f"brew list --cask --versions {package}"
+                check_cmd = f"{self._brew_path} list --versions {package}"
             already_installed = subprocess.call(
                 check_cmd, shell=True, cwd=cwd,
                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
@@ -78,7 +84,7 @@ class Brew(dotbot.Plugin):
         cwd = self._context.base_directory()
         for f in brew_files:
             self._log.info(f"Installing from file {f}")
-            cmd = f"brew bundle --verbose --file={f}"
+            cmd = f"{self._brew_path} bundle --verbose --file={f}"
             result = subprocess.call(cmd, shell=True, cwd=cwd)
             if result != 0:
                 self._log.warning(f'Failed to install file [{f}]')
@@ -89,7 +95,7 @@ class Brew(dotbot.Plugin):
         cwd = self._context.base_directory()
         for service in services_list:
             self._log.info(f"Starting service {service}")
-            cmd = f"brew services start {service}"
+            cmd = f"{self._brew_path} services start {service}"
             result = subprocess.call(cmd, shell=True, cwd=cwd)
             if result != 0:
                 self._log.warning(f'Failed to start service [{service}]')
@@ -97,39 +103,44 @@ class Brew(dotbot.Plugin):
         self._log.info('All services have been started')
         return True
 
-    def _bootstrap(self, cmd):
-        subprocess.call(
-            cmd, shell=True, cwd=self._context.base_directory(),
-            stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-        )
+    def _get_brew_path(self):
+        """Standard Homebrew installation locations across OS and Architectures."""
+        locations = [
+            "/opt/homebrew/bin/brew",          # Apple Silicon macOS
+            "/usr/local/bin/brew",             # Intel macOS
+            "/home/linuxbrew/.linuxbrew/bin/brew" # Linux
+        ]
+        
+        # Check current PATH first
+        system_brew = shutil.which("brew")
+        if system_brew:
+            return system_brew
+            
+        # Check standard installation directories
+        for loc in locations:
+            if os.path.exists(loc) and os.access(loc, os.X_OK):
+                return loc
+        return None
 
     def _bootstrap_brew(self):
-        link = "https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
-        # Handle brew in different locations:
-        # - /opt/homebrew/bin/brew (Apple Silicon macOS)
-        # - /usr/local/bin/brew (Intel macOS)
-        # - /home/linuxbrew/.linuxbrew/bin/brew (Linux)
-        cmd = """
-            _setup_brew_env() {{
-                if [ -x /opt/homebrew/bin/brew ]; then
-                    eval "$(/opt/homebrew/bin/brew shellenv)"
-                elif [ -x /usr/local/bin/brew ]; then
-                    eval "$(/usr/local/bin/brew shellenv)"
-                elif [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
-                    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-                fi
-            }}
-            if command -v brew >/dev/null 2>&1; then
-                brew update
-            else
-                _setup_brew_env
-                if command -v brew >/dev/null 2>&1; then
-                    brew update
-                else
-                    /bin/bash -c "$(curl -fsSL {0})"
-                    _setup_brew_env
-                    brew update
-                fi
-            fi
-        """.format(link)
-        self._bootstrap(cmd)
+        """Installs Homebrew if missing and updates the internal _brew_path."""
+        self._brew_path = self._get_brew_path()
+        
+        if not self._brew_path:
+            self._log.info("Homebrew not found. Installing...")
+            link = "https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
+            # We use /bin/bash explicitly as the installer requires it
+            cmd = f'NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL {link})"'
+            subprocess.call(cmd, shell=True, cwd=self._context.base_directory(),
+            stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+            # Resolve path again after installation
+            self._brew_path = self._get_brew_path()
+            
+            if self._brew_path:
+                self._log.info(f"Homebrew successfully installed at {self._brew_path}")
+            else:
+                self._log.error("Homebrew installation failed or path not found.")
+        else:
+            self._log.debug(f"Using Homebrew found at: {self._brew_path}")
+
