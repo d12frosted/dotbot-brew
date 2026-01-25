@@ -126,7 +126,11 @@ class Brew(dotbot.Plugin):
         """Installs Homebrew if missing and updates the internal _brew_path."""
         self._brew_path = self._get_brew_path()
         
-        if not self._brew_path:
+        if self._brew_path:
+            self._log.debug(f"Using Homebrew found at: {self._brew_path}")
+            subprocess.call(f"{self._brew_path} update-if-needed", shell=True, 
+                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        else:
             self._log.info("Homebrew not found. Installing...")
             link = "https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
             # We use /bin/bash explicitly as the installer requires it
@@ -141,6 +145,4 @@ class Brew(dotbot.Plugin):
                 self._log.info(f"Homebrew successfully installed at {self._brew_path}")
             else:
                 self._log.error("Homebrew installation failed or path not found.")
-        else:
-            self._log.debug(f"Using Homebrew found at: {self._brew_path}")
 
