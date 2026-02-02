@@ -12,6 +12,13 @@
 </a>
 #+end_html
 
+#+begin_html
+<p align="center">
+  <a href="https://github.com/sponsors/d12frosted"><img alt="Sponsor" src="https://img.shields.io/badge/Sponsor-d12frosted-pink?logo=githubsponsors&logoColor=white"/></a>
+</p>
+#+end_html
+
+
 Plugin for [[https://github.com/anishathalye/dotbot][dotbot]] that adds =brew=, =cask=, =tap=, =brewfile=, and =services=
 directives. It allows installation of packages using Homebrew on macOS and
 Linux. The =cask= directive is only supported on macOS. If =brew= is not
@@ -74,3 +81,7 @@ installed using =brew=. The same works with =cask=, =tap=, =brewfile=, and
 
 - services: [postgresql, redis]
 #+END_SRC
+
+* Support
+
+If you enjoy this project, you can support its development via [[https://github.com/sponsors/d12frosted][GitHub Sponsors]] or [[https://www.patreon.com/d12frosted][Patreon]].
